@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const songSchema = mongoose.Schema(
+const albumSchema = mongoose.Schema(
   {
     name: {
       type: String,
@@ -10,10 +10,7 @@ const songSchema = mongoose.Schema(
       type: String,
       required: true,
     },
-    song: {
-      type: String,
-      required: true,
-    },
+    songs: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Song' }],
     image: {
       type: String,
     },
@@ -23,12 +20,11 @@ const songSchema = mongoose.Schema(
     language: {
       type: String,
     },
-    album: { type: mongoose.Schema.Types.ObjectId, ref: 'Album' },
   },
   {
     timestamps: true,
   },
 );
 
-const Song = mongoose.model('Song', songSchema);
-export default Song;
+const Album = mongoose.model('Album', albumSchema);
+export default Album;
