@@ -22,3 +22,13 @@ export const authMiddleware = (req, res, next) => {
     });
   }
 };
+export const isAdminMiddleware = (req, res, next) => {
+  authMiddleware(req, res, () => {
+    console.log(req.user);
+    if (req.user.isAdmin === true) {
+      next();
+    } else {
+      res.status(403).json('Only admins can do this');
+    }
+  });
+};

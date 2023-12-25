@@ -20,6 +20,7 @@ export const login = asyncHandler(async (req, res) => {
     email: existingUser.email,
     id: existingUser.id,
     userName: existingUser.userName,
+    isAdmin: existingUser.isAdmin,
   };
   const token = jwt.sign(jwtPayload, process.env.SECRET_KEY, {
     expiresIn: '1h',

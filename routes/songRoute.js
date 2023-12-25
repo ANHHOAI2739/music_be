@@ -1,4 +1,15 @@
 import express from 'express';
+import {
+  addSongs,
+  deleteSong,
+  getAll,
+  getLikedSong,
+  likeSong,
+  updateSong,
+  uploadsAudio,
+  uploadsImage,
+} from '../controllers/songController.js';
+import uploadFile from '../configs/multerConfig.js';
 
 const router = express.Router();
 
@@ -8,5 +19,7 @@ router.put('/:songId', updateSong);
 router.delete('/:songId', deleteSong);
 router.put('/like/:songId', likeSong);
 router.get('/like', getLikedSong);
+router.post('/image', uploadFile.single('image'), uploadsImage);
+router.post('/audio', uploadFile.single('audio'), uploadsAudio);
 
 export default router;
