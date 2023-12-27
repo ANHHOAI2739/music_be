@@ -17,6 +17,9 @@ const songSchema = mongoose.Schema(
     image: {
       type: String,
     },
+    artistImg: {
+      type: String,
+    },
     category: {
       type: String,
     },

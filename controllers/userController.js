@@ -43,3 +43,15 @@ export const setAdmin = asyncHandler(async (req, res) => {
     message: `Admin status for user ${user.username} updated successfully`,
   });
 });
+
+export const searchUsers = asyncHandler(async (req, res) => {
+  const searchTerm = req.query.term?.toString();
+  const regexTerm = new RegExp(searchTerm, 'i');
+  const searchUsers = await User.find({
+    username: { $regex: regexTerm },
+  }).select('username avatar');
+  if (!searchUsers) return res.status(404).json({ message: 'User not found' });
+  res.status(200).json({
+    searchUsers: searchUsers,
+  });
+});

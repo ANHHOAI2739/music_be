@@ -2,6 +2,14 @@ import jwt from 'jsonwebtoken';
 import asyncHandler from 'express-async-handler';
 import bcrypt from 'bcrypt';
 import User from '../models/userModel.js';
+import { v2 as cloudinary } from 'cloudinary';
+import fs from 'fs';
+
+cloudinary.config({
+  cloud_name: 'dmlc8hjzu',
+  api_key: '463525567462749',
+  api_secret: 'gXldLMlEHGYIDKwoKTBaiSxPEZU',
+});
 
 export const login = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
@@ -56,5 +64,30 @@ export const getMe = asyncHandler(async (req, res) => {
   }
   res.json({
     userInfo: currentUser,
+  });
+});
+
+export const uploadAvatar = asyncHandler(async (req, res) => {
+  const { id } = req.user;
+  const file = req.file;
+  const result = await cloudinary.uploader.upload(file.path, {
+    resource_type: 'auto',
+    folder: 'music-app-avatar',
+  });
+  fs.unlinkSync(file.path);
+  const avatarUrl = result && result.secure_url;
+  const updatedUser = await User.findOneAndUpdate(
+    { _id: id },
+    {
+      profilePic: avatarUrl,
+    },
+    {
+      new: true,
+    },
+  ).select('-password');
+
+  return res.json({
+    message: 'Upload avatar successfully',
+    data: updatedUser,
   });
 });
