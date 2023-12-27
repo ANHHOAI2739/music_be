@@ -10,7 +10,8 @@ cloudinary.config({
 });
 
 export const addSongs = asyncHandler(async (req, res) => {
-  const { name, artist, song, category, image, language, album } = req.body;
+  const { name, artist, song, category, image, language, album, artistImg } =
+    req.body;
   const newSongs = new Song({
     name,
     artist,
@@ -19,6 +20,7 @@ export const addSongs = asyncHandler(async (req, res) => {
     language,
     image,
     album,
+    artistImg,
   });
   await newSongs.save();
   res.status(201).json({
@@ -113,5 +115,19 @@ export const uploadsAudio = asyncHandler(async (req, res) => {
   return res.status(200).json({
     data: audioUrl,
     message: 'upload audio successfully',
+  });
+});
+
+export const uploadsArtistImage = asyncHandler(async (req, res) => {
+  const file = req.file;
+  const result = await cloudinary.uploader.upload(file.path, {
+    resource_type: 'auto',
+    folder: 'ARTIST-IMAGE',
+  });
+  fs.unlinkSync(file.path);
+  const imageUrl = result && result.secure_url;
+  return res.status(200).json({
+    data: imageUrl,
+    message: 'upload image successfully',
   });
 });
