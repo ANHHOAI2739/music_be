@@ -22,6 +22,6 @@ router.put('/like/:songId', likeSong);
 router.get('/like', getLikedSong);
 router.post('/image', uploadFile.single('image'), uploadsImage);
 router.post('/audio', uploadFile.single('audio'), uploadsAudio);
-router.post('/artistImg', uploadFile.single('audio'), uploadsArtistImage);
+router.post('/artistImg', uploadFile.single('artistImg'), uploadsArtistImage);
 
 export default router;

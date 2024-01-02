@@ -12,18 +12,13 @@ const PORT = 5000;
 const whitelist = ['http://localhost:3000'];
 
 const corsOptions = {
-  origin: function (origin, callback) {
-    if (whitelist.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
+  origin: ['http://localhost:3000'],
+  credentials: true,
 };
 
 dbConnection();
 
-app.use(cors('*'));
+app.use(cors(corsOptions));
 app.use(cookieParser());
 app.use(express.json());
 

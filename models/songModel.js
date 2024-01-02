@@ -26,7 +26,8 @@ const songSchema = mongoose.Schema(
     language: {
       type: String,
     },
-    album: { type: mongoose.Schema.Types.ObjectId, ref: 'Album' },
+    // album: { type: mongoose.Schema.Types.ObjectId, ref: 'Album' },
+    album: { type: String },
   },
   {
     timestamps: true,

@@ -1,5 +1,6 @@
 import asyncHandler from 'express-async-handler';
 import User from '../models/userModel.js';
+import Song from '../models/songModel.js';
 
 export const allUser = asyncHandler(async (req, res) => {
   const page = parseInt(req.query.page) || 1;
@@ -51,7 +52,36 @@ export const searchUsers = asyncHandler(async (req, res) => {
     username: { $regex: regexTerm },
   }).select('username avatar');
   if (!searchUsers) return res.status(404).json({ message: 'User not found' });
+  const searchSongs = await Song.find({
+    name: { $regex: regexTerm },
+  }).select('image artist');
+  if (!searchSongs) return res.status(404).json({ message: 'Song not found' });
   res.status(200).json({
     searchUsers: searchUsers,
+    searchSongs: searchSongs,
   });
+});
+
+export const editUser = asyncHandler(async (req, res) => {
+  const { userId } = req.user;
+  const { username } = req.body;
+  const user = await User.findById(userId);
+  if (!user) {
+    return res.status(404).json({ message: 'User not found' });
+  }
+  user.username = username;
+  await user.save();
+  return res
+    .status(200)
+    .json({ message: 'Username updated successfully', user });
+});
+
+export const deleteUser = asyncHandler(async (req, res) => {
+  const { userId } = req.user;
+  const user = await User.findById(userId);
+  if (!user) {
+    return res.status(404).json({ message: 'User not found' });
+  }
+  await user.remove();
+  return res.status(200).json({ message: 'User deleted successfully' });
 });

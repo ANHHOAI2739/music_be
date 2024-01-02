@@ -51,11 +51,10 @@ export const getAll = asyncHandler(async (req, res) => {
 
 export const updateSong = asyncHandler(async (req, res) => {
   const { songId } = req.params;
-  const { name, artist, song, category, language, album } = req.body;
-
+  const { name, artist, song, category, image, language, album } = req.body;
   const updatedSong = await Song.findByIdAndUpdate(
     songId,
-    { name, artist, song, category, language, album },
+    { name, artist, song, category, language, album, image },
     { new: true },
   );
 
@@ -66,7 +65,7 @@ export const updateSong = asyncHandler(async (req, res) => {
 
 export const deleteSong = asyncHandler(async (req, res) => {
   const { songId } = req.params;
-  const deletedSong = await Song.findByIdAndRemove(songId);
+  const deletedSong = await Song.findByIdAndDelete(songId);
   if (!deletedSong) {
     return res.status(404).json({ message: 'Song not found' });
   }
