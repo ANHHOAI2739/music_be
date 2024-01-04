@@ -63,25 +63,27 @@ export const searchUsers = asyncHandler(async (req, res) => {
 });
 
 export const editUser = asyncHandler(async (req, res) => {
-  const { userId } = req.user;
+  const { id: userId } = req.user;
   const { username } = req.body;
-  const user = await User.findById(userId);
+  const user = await User.findByIdAndUpdate(
+    userId,
+    { username },
+    { new: true },
+  );
   if (!user) {
     return res.status(404).json({ message: 'User not found' });
   }
-  user.username = username;
-  await user.save();
+
   return res
     .status(200)
     .json({ message: 'Username updated successfully', user });
 });
 
 export const deleteUser = asyncHandler(async (req, res) => {
-  const { userId } = req.user;
-  const user = await User.findById(userId);
+  const { id: userId } = req.user;
+  const user = await User.findByIdAndDelete(userId);
   if (!user) {
     return res.status(404).json({ message: 'User not found' });
   }
-  await user.remove();
   return res.status(200).json({ message: 'User deleted successfully' });
 });
