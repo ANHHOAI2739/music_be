@@ -50,7 +50,7 @@ export const searchUsers = asyncHandler(async (req, res) => {
   const regexTerm = new RegExp(searchTerm, 'i');
   const searchUsers = await User.find({
     username: { $regex: regexTerm },
-  }).select('username avatar');
+  }).select('username profilePic');
   if (!searchUsers) return res.status(404).json({ message: 'User not found' });
   const searchSongs = await Song.find({
     name: { $regex: regexTerm },

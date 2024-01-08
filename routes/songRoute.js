@@ -4,6 +4,7 @@ import {
   deleteSong,
   getAll,
   getLikedSong,
+  getSongById,
   likeSong,
   updateSong,
   uploadsArtistImage,
@@ -18,6 +19,7 @@ router.post('/', addSongs);
 router.get('/', getAll);
 router.put('/:songId', updateSong);
 router.delete('/:songId', deleteSong);
+router.get('/:songId', getSongById);
 router.put('/like/:songId', likeSong);
 router.get('/like', getLikedSong);
 router.post('/image', uploadFile.single('image'), uploadsImage);
