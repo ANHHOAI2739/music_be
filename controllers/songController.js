@@ -89,6 +89,15 @@ export const getLikedSong = asyncHandler(async (req, res) => {
   res.status(200).json({ likedSongs: likedSongs });
 });
 
+export const getSongById = asyncHandler(async (req, res) => {
+  const { songId } = req.params;
+  const song = await Song.findById(songId);
+  if (!song) {
+    return res.status(404).json({ message: 'Song not found' });
+  }
+  res.status(200).json({ data: song, message: 'Song retrieved successfully' });
+});
+
 export const uploadsImage = asyncHandler(async (req, res) => {
   const file = req.file;
   const result = await cloudinary.uploader.upload(file.path, {
