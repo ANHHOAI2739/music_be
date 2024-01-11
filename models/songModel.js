@@ -28,7 +28,14 @@ const songSchema = mongoose.Schema(
     },
     // album: { type: mongoose.Schema.Types.ObjectId, ref: 'Album' },
     album: { type: String },
+    likes: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Users',
+      },
+    ],
   },
+
   {
     timestamps: true,
   },
