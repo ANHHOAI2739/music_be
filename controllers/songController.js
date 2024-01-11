@@ -76,12 +76,26 @@ export const deleteSong = asyncHandler(async (req, res) => {
 
 export const likeSong = asyncHandler(async (req, res) => {
   const { songId } = req.params;
-  const likedSong = await Song.findByIdAndUpdate(
-    songId,
-    { $inc: { likes: 1 } },
-    { new: true },
-  );
-  res.status(200).json({ message: 'Song liked successfully', song: likedSong });
+  const { id: userId } = req.user;
+  try {
+    const song = await Song.findById(songId);
+    if (!song) {
+      return res.status(404).json({ message: 'Song not found' });
+    }
+    const likedIndex = song.likes.indexOf(userId);
+    if (likedIndex === -1) {
+      song.likes.push(userId);
+    } else {
+      song.likes.splice(likedIndex, 1);
+    }
+    const likeCount = song.likes.length;
+    song.likesCount = likeCount;
+    const likedSong = await song.save();
+    res.status(200).json({ message: 'Operation successful', song: likedSong });
+  } catch (error) {
+    console.error('Error liking song:', error.message);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
 });
 
 export const getLikedSong = asyncHandler(async (req, res) => {
